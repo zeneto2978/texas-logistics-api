@@ -40,4 +40,37 @@ public class DriverExceptionHandler {
                 "message", exception.getMessage()
         );
     }
+
+    @ExceptionHandler(DriverHasAssignmentsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> handleDriverHasAssignments(DriverHasAssignmentsException exception){
+        return Map.of(
+                "timestamp", Instant.now(),
+                "status", 409,
+                "error", "Conflict",
+                "message", exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(DriverInactiveException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleDriverInactive(DriverInactiveException exception){
+        return Map.of(
+                "timestamp", Instant.now(),
+                "status", 400,
+                "error", "Bad Request",
+                "message", exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(DriverBusyException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleDriverBusy(DriverBusyException exception){
+        return Map.of(
+                "timestamp", Instant.now(),
+                "status", 400,
+                "error", "Bad Request",
+                "message", exception.getMessage()
+        );
+    }
 }

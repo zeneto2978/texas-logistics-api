@@ -11,7 +11,7 @@ public class AssignmentResponseDTO {
     private Long shipmentId;
     private String shipmentOrigin;
     private String shipmentDestination;
-    private LocalDateTime assignmentAt;
+    private LocalDateTime assignedAt;
 
     public AssignmentResponseDTO(Assignment assignment) {
         this.id = assignment.getId();
@@ -20,7 +20,7 @@ public class AssignmentResponseDTO {
         this.shipmentId = assignment.getShipment().getId();
         this.shipmentOrigin = assignment.getShipment().getOrigin();
         this.shipmentDestination = assignment.getShipment().getDestination();
-        this.assignmentAt = assignment.getAssignedAt();
+        this.assignedAt = assignment.getAssignedAt();
     }
 
 
@@ -49,6 +49,6 @@ public class AssignmentResponseDTO {
     }
 
     public LocalDateTime getAssignmentAt() {
-        return assignmentAt;
+        return assignedAt;
     }
 }

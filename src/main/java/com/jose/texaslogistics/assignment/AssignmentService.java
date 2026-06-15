@@ -1,13 +1,14 @@
 package com.jose.texaslogistics.assignment;
 
 
-import com.jose.texaslogistics.driver.Driver;
-import com.jose.texaslogistics.driver.DriverNotFoundException;
-import com.jose.texaslogistics.driver.DriverRepository;
+import com.jose.texaslogistics.driver.*;
 import com.jose.texaslogistics.shipment.Shipment;
 import com.jose.texaslogistics.shipment.ShipmentNotFoundException;
 import com.jose.texaslogistics.shipment.ShipmentRepository;
 import org.springframework.stereotype.Service;
+import com.jose.texaslogistics.driver.DriverStatus;
+import com.jose.texaslogistics.driver.DriverInactiveException;
+import com.jose.texaslogistics.driver.DriverBusyException;
 
 import java.util.List;
 
@@ -30,6 +31,14 @@ public class AssignmentService {
     public AssignmentResponseDTO createAssignment(AssignmentRequestDTO requestDTO) {
         Driver driver = driverRepository.findById(requestDTO.getDriverId())
                 .orElseThrow(() -> new DriverNotFoundException(requestDTO.getDriverId()));
+
+        if (driver.getStatus() == DriverStatus.INACTIVE) {
+            throw new DriverInactiveException(driver.getId());
+        }
+
+        if (driver.getStatus() == DriverStatus.BUSY) {
+            throw new DriverBusyException(driver.getId());
+        }
 
         Shipment shipment = shipmentRepository.findById(requestDTO.getShipmentId())
                 .orElseThrow(() -> new ShipmentNotFoundException(requestDTO.getShipmentId()));
