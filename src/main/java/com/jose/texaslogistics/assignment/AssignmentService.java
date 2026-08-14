@@ -2,13 +2,12 @@ package com.jose.texaslogistics.assignment;
 
 
 import com.jose.texaslogistics.driver.*;
-import com.jose.texaslogistics.shipment.Shipment;
-import com.jose.texaslogistics.shipment.ShipmentNotFoundException;
-import com.jose.texaslogistics.shipment.ShipmentRepository;
+import com.jose.texaslogistics.shipment.*;
 import org.springframework.stereotype.Service;
 import com.jose.texaslogistics.driver.DriverStatus;
 import com.jose.texaslogistics.driver.DriverInactiveException;
 import com.jose.texaslogistics.driver.DriverBusyException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,9 +27,11 @@ public class AssignmentService {
         this.shipmentRepository = shipmentRepository;
     }
 
+    @Transactional
     public AssignmentResponseDTO createAssignment(AssignmentRequestDTO requestDTO) {
         Driver driver = driverRepository.findById(requestDTO.getDriverId())
-                .orElseThrow(() -> new DriverNotFoundException(requestDTO.getDriverId()));
+                .orElseThrow(() ->
+                        new DriverNotFoundException(requestDTO.getDriverId()));
 
         if (driver.getStatus() == DriverStatus.INACTIVE) {
             throw new DriverInactiveException(driver.getId());
@@ -41,17 +42,60 @@ public class AssignmentService {
         }
 
         Shipment shipment = shipmentRepository.findById(requestDTO.getShipmentId())
-                .orElseThrow(() -> new ShipmentNotFoundException(requestDTO.getShipmentId()));
+                .orElseThrow(() ->
+                        new ShipmentNotFoundException(requestDTO.getShipmentId()));
+
+        if (shipment.getStatus() != ShipmentStatus.PENDING) {
+            throw new ShipmentNotAssignableException(
+                    shipment.getId(),
+                    shipment.getStatus()
+            );
+        }
 
         Assignment assignment = new Assignment();
 
         assignment.setDriver(driver);
+        driver.setStatus(DriverStatus.BUSY);
+
         assignment.setShipment(shipment);
+        shipment.setStatus(ShipmentStatus.IN_TRANSIT);
 
         Assignment savedAssignment = assignmentRepository.save(assignment);
 
         return new AssignmentResponseDTO(savedAssignment);
     }
+
+    public AssignmentResponseDTO getAssignmentById(Long id) {
+        Assignment assignment = assignmentRepository.findById(id)
+                .orElseThrow(()->
+                        new RuntimeException("Assignment not found with id: " + id));
+        return new AssignmentResponseDTO(assignment);
+    }
+
+    @Transactional
+    public AssignmentResponseDTO completeAssignment(Long id) {
+        Assignment assignment = assignmentRepository.findById(id)
+                .orElseThrow(()->
+                        new AssignmentNotFoundException(id));
+
+        Driver driver = assignment.getDriver();
+
+        Shipment shipment = assignment.getShipment();
+
+        if (shipment.getStatus() != ShipmentStatus.IN_TRANSIT) {
+            throw new ShipmentNotInTransitException(
+                    shipment.getId(),
+                    shipment.getStatus()
+            );
+        }
+
+        shipment.setStatus(ShipmentStatus.DELIVERED);
+
+        driver.setStatus(DriverStatus.AVAILABLE);
+
+        return new AssignmentResponseDTO(assignment);
+    }
+
 
     public List<AssignmentResponseDTO> getAllAssignment() {
         return assignmentRepository.findAll()

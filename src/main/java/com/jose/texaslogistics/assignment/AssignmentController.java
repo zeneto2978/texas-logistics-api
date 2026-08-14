@@ -30,4 +30,9 @@ public class AssignmentController {
     public List<AssignmentResponseDTO> getAllAssignments() {
         return assignmentService.getAllAssignment();
     }
+
+    @PutMapping("/{id}/complete")
+    public AssignmentResponseDTO completeAssignment(@PathVariable Long id) {
+        return assignmentService.completeAssignment(id);
+    }
 }

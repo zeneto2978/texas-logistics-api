@@ -44,4 +44,28 @@ public class ShipmentExceptionHandler {
                 "errors", errors
         );
     }
+
+    @ExceptionHandler(ShipmentNotAssignableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleShipmentNotAssignable(
+            ShipmentNotAssignableException exception){
+        return Map.of(
+                "timestamp", Instant.now(),
+                "status", 400,
+                "error", "Bad Request",
+                "message", exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(ShipmentNotInTransitException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleShipmentNotInTransit(
+            ShipmentNotInTransitException exception) {
+        return Map.of(
+                "timestamp", Instant.now(),
+                "status", 400,
+                "error", "Bad Request",
+                "message", exception.getMessage()
+        );
+    }
 }
