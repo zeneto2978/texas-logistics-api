@@ -1,9 +1,9 @@
 package com.jose.texaslogistics.shipment;
 
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ShipmentService {
@@ -26,11 +26,10 @@ public class ShipmentService {
         return new ShipmentResponseDTO(savedShipment);
     }
 
-    public List<ShipmentResponseDTO> getAllShipments(){
-        return shipmentRepository.findAll()
-                .stream()
-                .map(ShipmentResponseDTO::new)
-                .toList();
+    public Page<ShipmentResponseDTO> getAllShipments(Pageable pageable){
+
+        return shipmentRepository.findAll(pageable)
+                .map(ShipmentResponseDTO::new);
     }
 
     public ShipmentResponseDTO getShipmentById(Long id) {
@@ -59,5 +58,12 @@ public class ShipmentService {
         }
 
         shipmentRepository.deleteById(id);
+    }
+
+    public Page<ShipmentResponseDTO> getShipmentByStatus(
+            ShipmentStatus status,
+            Pageable pageable) {
+        return shipmentRepository.findByStatus(status, pageable)
+                .map(ShipmentResponseDTO::new);
     }
 }

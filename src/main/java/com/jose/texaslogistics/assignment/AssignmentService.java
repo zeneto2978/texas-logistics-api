@@ -3,6 +3,8 @@ package com.jose.texaslogistics.assignment;
 
 import com.jose.texaslogistics.driver.*;
 import com.jose.texaslogistics.shipment.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.jose.texaslogistics.driver.DriverStatus;
 import com.jose.texaslogistics.driver.DriverInactiveException;
@@ -66,9 +68,11 @@ public class AssignmentService {
     }
 
     public AssignmentResponseDTO getAssignmentById(Long id) {
+
         Assignment assignment = assignmentRepository.findById(id)
                 .orElseThrow(()->
-                        new RuntimeException("Assignment not found with id: " + id));
+                        new AssignmentNotFoundException(id));
+
         return new AssignmentResponseDTO(assignment);
     }
 
@@ -97,8 +101,20 @@ public class AssignmentService {
     }
 
 
-    public List<AssignmentResponseDTO> getAllAssignment() {
-        return assignmentRepository.findAll()
+    public Page<AssignmentResponseDTO> getAllAssignments(Pageable pageable) {
+
+        return assignmentRepository.findAll(pageable)
+                .map(AssignmentResponseDTO::new);
+    }
+
+
+    public List<AssignmentResponseDTO> getAssignmentByDriver(Long driverId) {
+
+        if (!driverRepository.existsById(driverId)) {
+            throw new DriverNotFoundException(driverId);
+        }
+
+        return assignmentRepository.findByDriverId(driverId)
                 .stream()
                 .map(AssignmentResponseDTO::new)
                 .toList();

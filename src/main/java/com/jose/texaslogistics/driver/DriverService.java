@@ -1,6 +1,8 @@
 package com.jose.texaslogistics.driver;
 
 import com.jose.texaslogistics.assignment.AssignmentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class DriverService {
     // AssignmentRepository:
     // usado apenas para verificar se o motorista
     // possui assignments antes de deletar.
+
     public DriverService(DriverRepository driverRepository,
                          AssignmentRepository assignmentRepository) {
         this.driverRepository = driverRepository;
@@ -84,5 +87,18 @@ public class DriverService {
         }
 
         driverRepository.delete(existingDriver);
+    }
+
+    public Page<DriverResponseDTO> getAllDrivers(Pageable pageable) {
+
+        return driverRepository.findAll(pageable)
+                .map(DriverResponseDTO::new);
+    }
+
+    public Page<DriverResponseDTO> getDriverByStatus(
+            DriverStatus status,
+            Pageable pageable) {
+        return driverRepository.findByStatus(status, pageable)
+                .map(DriverResponseDTO::new);
     }
 }

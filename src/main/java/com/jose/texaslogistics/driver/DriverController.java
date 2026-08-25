@@ -2,10 +2,11 @@ package com.jose.texaslogistics.driver;
 
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/drivers")
@@ -24,8 +25,14 @@ public class DriverController {
     }
 
     @GetMapping
-    public List<DriverResponseDTO> getAllDrivers(){
-        return driverService.getAllDrivers();
+    public Page<DriverResponseDTO> getAllDrivers(
+            @RequestParam(required = false) DriverStatus status,
+            Pageable pageable) {
+        if (status != null) {
+            return driverService.getDriverByStatus(status, pageable);
+        }
+
+        return driverService.getAllDrivers(pageable);
     }
 
     @GetMapping("/{id}")
