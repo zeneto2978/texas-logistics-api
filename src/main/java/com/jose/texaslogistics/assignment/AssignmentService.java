@@ -6,9 +6,6 @@ import com.jose.texaslogistics.shipment.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.jose.texaslogistics.driver.DriverStatus;
-import com.jose.texaslogistics.driver.DriverInactiveException;
-import com.jose.texaslogistics.driver.DriverBusyException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
