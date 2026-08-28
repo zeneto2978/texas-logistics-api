@@ -29,7 +29,7 @@ public class DriverController {
             @RequestParam(required = false) DriverStatus status,
             Pageable pageable) {
         if (status != null) {
-            return driverService.getDriverByStatus(status, pageable);
+            return driverService.getDriversByStatus(status, pageable);
         }
 
         return driverService.getAllDrivers(pageable);

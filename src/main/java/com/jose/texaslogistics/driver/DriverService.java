@@ -22,8 +22,9 @@ public class DriverService {
     // usado apenas para verificar se o motorista
     // possui assignments antes de deletar.
 
-    public DriverService(DriverRepository driverRepository,
-                         AssignmentRepository assignmentRepository) {
+    public DriverService(
+            DriverRepository driverRepository,
+            AssignmentRepository assignmentRepository) {
         this.driverRepository = driverRepository;
         this.assignmentRepository = assignmentRepository;
     }
@@ -95,7 +96,7 @@ public class DriverService {
                 .map(DriverResponseDTO::new);
     }
 
-    public Page<DriverResponseDTO> getDriverByStatus(
+    public Page<DriverResponseDTO> getDriversByStatus(
             DriverStatus status,
             Pageable pageable) {
         return driverRepository.findByStatus(status, pageable)
