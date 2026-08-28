@@ -1,6 +1,6 @@
 package com.jose.texaslogistics.driver;
 
-
+import com.jose.texaslogistics.*;
 import com.jose.texaslogistics.assignment.AssignmentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +21,7 @@ public class DriverServiceTest {
 
     private DriverService driverService;
 
+    @Mock
     private AssignmentRepository assignmentRepository;
 
     @BeforeEach
