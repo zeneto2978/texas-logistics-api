@@ -33,7 +33,7 @@ public class AssignmentController {
     }
 
     @GetMapping
-    @Operation(summary = "List assignment", description = "Returns assignments with pagination and sorting.")
+    @Operation(summary = "List assignments", description = "Returns assignments with pagination and sorting.")
     public Page<AssignmentResponseDTO> getAllAssignments(Pageable pageable) {
         return assignmentService.getAllAssignments(pageable);
     }
