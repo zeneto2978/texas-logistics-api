@@ -3,6 +3,7 @@ package com.jose.texaslogistics.exception;
 
 import com.jose.texaslogistics.assignment.AssignmentNotFoundException;
 import com.jose.texaslogistics.driver.DriverBusyException;
+import com.jose.texaslogistics.driver.DriverHasAssignmentsException;
 import com.jose.texaslogistics.driver.DriverInactiveException;
 import com.jose.texaslogistics.driver.DriverNotFoundException;
 import com.jose.texaslogistics.shipment.ShipmentNotAssignableException;
@@ -28,6 +29,18 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(
                 404,
                 "Not Found",
+                exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(DriverHasAssignmentsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> handleDriverHasAssignments(
+            DriverHasAssignmentsException exception) {
+
+        return buildErrorResponse(
+                409,
+                "Conflict",
                 exception.getMessage()
         );
     }
