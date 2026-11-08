@@ -2,6 +2,8 @@ package com.jose.texaslogistics.shipment;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,10 @@ public class ShipmentController {
 
     @PostMapping
     @Operation(summary = "Create a new shipment", description = "Registers a new shipment in the logistics system.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Shipment created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid shipment data")
+    })
     @ResponseStatus(HttpStatus.CREATED)
     public ShipmentResponseDTO createShipment(@Valid @RequestBody ShipmentRequestDTO requestDTO){
 
@@ -48,12 +54,21 @@ public class ShipmentController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Find shipment by ID", description = "Returns a shipment registered in the logistic system.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Shipment found successfully"),
+            @ApiResponse(responseCode = "404", description = "Shipment not found")
+    })
     public ShipmentResponseDTO getShipmentById(@PathVariable Long id){
         return shipmentService.getShipmentById(id);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a shipment", description = "Updates the information of an existing shipment.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Shipment updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid shipment data"),
+            @ApiResponse(responseCode = "404", description = "Shipment not found")
+    })
     public ShipmentResponseDTO updateShipment(
             @PathVariable Long id,
             @Valid
@@ -63,6 +78,10 @@ public class ShipmentController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a shipment", description = "Deletes an existing shipment from the logistics system.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Shipment deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Shipment not found")
+    })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteShipment(@PathVariable Long id) {
         shipmentService.deleteShipment(id);
