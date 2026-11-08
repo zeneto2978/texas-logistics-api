@@ -18,11 +18,26 @@ public class ShipmentRequestDTO {
         return origin;
     }
 
+    // setter adicionado para permitir criar o objeto nos testes
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
     public String getDestination() {
         return destination;
     }
 
+    // setter adicionado para permitir criar o objeto nos testes
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    // setter adicionado para permitir criar o objeto nos testes
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
