@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DriverNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> handleDriverNotFound(
+    public ErrorResponse handleDriverNotFound(
             DriverNotFoundException exception) {
         return buildErrorResponse(
                 404,
@@ -35,7 +34,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DriverHasAssignmentsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public Map<String, Object> handleDriverHasAssignments(
+    public ErrorResponse handleDriverHasAssignments(
             DriverHasAssignmentsException exception) {
 
         return buildErrorResponse(
@@ -47,7 +46,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ShipmentNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> handleShipmentNotFound(
+    public ErrorResponse handleShipmentNotFound(
             ShipmentNotFoundException exception) {
         return buildErrorResponse(
                 404,
@@ -58,7 +57,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AssignmentNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> handleAssignmentNotFound(
+    public ErrorResponse handleAssignmentNotFound(
             AssignmentNotFoundException exception) {
         return buildErrorResponse(
                 404,
@@ -69,7 +68,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DriverInactiveException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleDriverInactive(
+    public ErrorResponse handleDriverInactive(
             DriverInactiveException exception) {
         return buildErrorResponse(
                 400,
@@ -80,7 +79,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DriverBusyException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleDriverBusy(
+    public ErrorResponse handleDriverBusy(
             DriverBusyException exception) {
         return buildErrorResponse(
                 400,
@@ -91,7 +90,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ShipmentNotAssignableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleShipmentNotAssignable(
+    public ErrorResponse handleShipmentNotAssignable(
             ShipmentNotAssignableException exception) {
         return buildErrorResponse(
                 400,
@@ -102,7 +101,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ShipmentNotInTransitException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleShipmentNotInTransit(
+    public ErrorResponse handleShipmentNotInTransit(
             ShipmentNotInTransitException exception) {
         return buildErrorResponse(
                 400,
@@ -113,7 +112,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleValidationsErrors(
+    public ValidationErrorResponse handleValidationsErrors(
             MethodArgumentNotValidException exception) {
         Map<String, String> errors = new HashMap<>();
 
@@ -126,25 +125,14 @@ public class GlobalExceptionHandler {
                     );
                 });
 
-        return Map.of(
-                "timestamp", Instant.now(),
-                "status", 400,
-                "error", "Bad Request",
-                "message", "Validation failed",
-                "errors", errors
-        );
+        return ValidationErrorResponse.of(errors);
     }
 
-    private Map<String, Object> buildErrorResponse(
+    private ErrorResponse buildErrorResponse(
             int status,
             String error,
             String message) {
 
-        return Map.of(
-                "timestamp", Instant.now(),
-                "status", status,
-                "error", error,
-                "message", message
-        );
+        return ErrorResponse.of(status, error, message);
     }
 }
