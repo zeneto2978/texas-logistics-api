@@ -21,6 +21,7 @@ public class Shipment {
 
     private String description;
 
+    @Enumerated(EnumType.STRING)
     private ShipmentStatus status;
 
     private LocalDateTime createdAt;
