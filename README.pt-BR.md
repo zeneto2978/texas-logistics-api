@@ -167,6 +167,19 @@ A API sobe em `http://localhost:8080`.
 
 Abra o Swagger UI: <http://localhost:8080/swagger-ui/index.html>
 
+## Rodando com Docker
+
+A forma mais simples de rodar tudo (API + PostgreSQL) com um comando. Só precisa do Docker.
+
+```bash
+docker compose up --build
+```
+
+- API: <http://localhost:8080>, Swagger UI: <http://localhost:8080/swagger-ui/index.html>
+- O PostgreSQL fica exposto na porta `15432` do seu computador (dentro do Docker a API usa `db:5432`).
+- Os dados ficam no volume `pgdata`. Para parar, use `Ctrl+C` e `docker compose down` (com `-v` apaga também os dados).
+- As credenciais padrão servem só para desenvolvimento local. Para trocá-las, use as variáveis de ambiente `DB_USERNAME` e `DB_PASSWORD` (ou um arquivo `.env`).
+
 ## Rodando os testes
 
 ```bash
@@ -181,7 +194,7 @@ A suíte tem hoje **23 testes unitários** cobrindo os services de driver, assig
 - [x] Respostas de erro padronizadas (`ErrorResponse`)
 - [x] Testes unitários do `ShipmentService`
 - [ ] Testes de controller (MockMvc) e de integração (Testcontainers)
-- [ ] Docker e docker-compose com PostgreSQL
+- [x] Docker e docker-compose com PostgreSQL
 - [ ] Lock otimista para evitar atribuições duplicadas com concorrência
 - [ ] Spring Security com JWT e acesso por papéis (admin, dispatcher, driver)
 - [ ] Histórico de status e auditoria
