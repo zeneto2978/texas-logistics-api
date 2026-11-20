@@ -173,13 +173,14 @@ Abra o Swagger UI: <http://localhost:8080/swagger-ui/index.html>
 ./mvnw clean test
 ```
 
-A suíte tem hoje **15 testes unitários** cobrindo os services de driver e assignment (caminhos de sucesso e cada falha de regra de negócio), usando JUnit 5 e Mockito no padrão Arrange-Act-Assert.
+A suíte tem hoje **23 testes unitários** cobrindo os services de driver, assignment e shipment (caminhos de sucesso e cada falha de regra de negócio), usando JUnit 5 e Mockito no padrão Arrange-Act-Assert.
 
 ## Roadmap
 
-- [ ] Documentação Swagger de shipments e assignments
-- [ ] `ErrorResponse` padronizado e documentado no OpenAPI
-- [ ] Testes do `ShipmentService`, testes de controller (MockMvc) e de integração (Testcontainers)
+- [x] Documentação Swagger de drivers, shipments e assignments
+- [x] Respostas de erro padronizadas (`ErrorResponse`)
+- [x] Testes unitários do `ShipmentService`
+- [ ] Testes de controller (MockMvc) e de integração (Testcontainers)
 - [ ] Docker e docker-compose com PostgreSQL
 - [ ] Lock otimista para evitar atribuições duplicadas com concorrência
 - [ ] Spring Security com JWT e acesso por papéis (admin, dispatcher, driver)

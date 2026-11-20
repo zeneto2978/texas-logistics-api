@@ -173,13 +173,14 @@ Open Swagger UI: <http://localhost:8080/swagger-ui/index.html>
 ./mvnw clean test
 ```
 
-The suite currently has **15 unit tests** covering the driver and assignment services (success paths and every business-rule failure), using JUnit 5 and Mockito with the Arrange-Act-Assert pattern.
+The suite currently has **23 unit tests** covering the driver, assignment, and shipment services (success paths and every business-rule failure), using JUnit 5 and Mockito with the Arrange-Act-Assert pattern.
 
 ## Roadmap
 
-- [ ] Swagger documentation for shipments and assignments
-- [ ] Standardized `ErrorResponse` documented in OpenAPI
-- [ ] `ShipmentService` tests, controller tests (MockMvc), and integration tests (Testcontainers)
+- [x] Swagger documentation for drivers, shipments, and assignments
+- [x] Standardized error responses (`ErrorResponse`)
+- [x] `ShipmentService` unit tests
+- [ ] Controller tests (MockMvc) and integration tests (Testcontainers)
 - [ ] Docker and docker-compose with PostgreSQL
 - [ ] Optimistic locking to prevent duplicate assignments under concurrency
 - [ ] Spring Security with JWT and role-based access (admin, dispatcher, driver)
