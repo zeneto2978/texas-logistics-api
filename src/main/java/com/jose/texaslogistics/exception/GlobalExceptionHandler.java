@@ -10,6 +10,7 @@ import com.jose.texaslogistics.shipment.ShipmentNotAssignableException;
 import com.jose.texaslogistics.shipment.ShipmentNotFoundException;
 import com.jose.texaslogistics.shipment.ShipmentNotInTransitException;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -107,6 +108,17 @@ public class GlobalExceptionHandler {
                 400,
                 "Bad Request",
                 exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse hadleOptimisticLockingFailure(
+            ObjectOptimisticLockingFailureException exception) {
+        return buildErrorResponse(
+                409,
+                "Conflict",
+                "The resource was modified by another request. Please try again."
         );
     }
 

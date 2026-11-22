@@ -26,6 +26,10 @@ public class Shipment {
 
     private LocalDateTime createdAt;
 
+    @Version
+    @Column(columnDefinition = "bigint default 0")
+    private Long version;
+
     public Shipment(){
     }
 

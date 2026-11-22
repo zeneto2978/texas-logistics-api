@@ -20,6 +20,10 @@ public class Driver {
     @Enumerated(EnumType.STRING)
     private DriverStatus status;
 
+    @Version
+    @Column(columnDefinition = "bigint default 0")
+    private Long version;
+
     public Driver() {
     }
 
